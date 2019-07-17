@@ -8,14 +8,14 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
-        body {
-            background-color: aqua
-        }
+        /* body {
+            background-color:;
+        } */
         
         * {
             /* background-color: blueviolet; */
             box-sizing: border-box;
-            cursor: url('/hammer.png'), pointer;
+            cursor: url('hammer.png'), pointer;
         }
         
         main {
@@ -35,12 +35,13 @@
         } */
         
         .table {
+            border: none;
             margin: none;
-            border: 0.1px solid black;
+            /* border: 0.1px solid black; */
         }
         
         button {
-            background-color: greenyellow;
+            /* background-color: greenyellow; */
             border: none;
             position: relative;
             left: -300px;
@@ -49,13 +50,23 @@
             height: 70px;
             width: 100px;
         }
+        
+        input {
+            height: 100px;
+        }
+        
+        .score {
+            position: fixed;
+            bottom: 0px;
+            background-color: azure;
+        }
     </style>
 
 </head>
 
 <body>
     <header>
-        <h1 class="text-center text-white">Hammer-The-Rat</h1>
+        <h1 class="text-center">Hammer-The-Rat</h1>
     </header>
     <main class="container">
         <section>
@@ -66,7 +77,10 @@
             <button id="reset" style="margin: 50px;">
              Reset 
             </button>
-            <input type="text"></input>
+            <div class="score">
+                <label for="score">Your Score</label>
+                <input type="text"></input>
+            </div>
         </section>
     </main>
 </body>
@@ -76,7 +90,7 @@
 <script>
     let container = document.querySelector('#container');
     var score = 0;
-    let gridsize = prompt('enter grid size seperated by commas');
+    let gridsize = prompt('enter grid size seperated by commas', '5 5');
     // let gridsize = "13,17";
     //console.log(gridsize);
     var table = gridsize.split(' ');
@@ -138,19 +152,36 @@
     $('td').css({
         'height': tdheight,
         'width': tdwidth,
-        'border': '1px solid black',
+        'border-radius': '50%',
+        'border': 'none',
         'background-size': 'contain',
         'background-repeat': 'no-repeat',
         // 'cursor': 'url("https://www.cursor.cc/cursor3d/38197.png")',
         // 'background-image': '/home/hardik/VSWORKSPACE/rat.png'
-        'background-color': '#ecf542',
+        'background-color': '#D2691E',
+        'outline': 'none'
 
     });
-    $('td').on('mouseover', function() {
+    $('td').on('mousedown', function() {
+        let deadurl = "rat-dead.gif";
         //    console.log($(this).attr('image'));
+        $(this).css('background-color', 'brown');
         if ($(this).attr('image') == 'true') {
             $('input').val(++score);
+            $(this).css('background-color', 'green');
+            $(this).css(
+                "background-image", "url(" + deadurl + ")"
+            );
         }
+    })
+    $('td').on('mouseup', function() {
+
+        //    console.log($(this).attr('image'));
+        $(this).css('background-color', '#D2691E');
+        $(this).css(
+            "background-image", "none"
+        );
+
     })
 
     function randomratgenerator() {
@@ -159,7 +190,7 @@
             ratIndex = Math.floor(Math.random() * row * column);
         }
         console.log(ratIndex);
-        imgurl = "https://ui-ex.com/images/rat-transparent-animated-3.gif";
+        imgurl = "rat-transparent-animated-3.gif";
 
         $('td').each(function() {
             //  console.log(parseInt($(this).attr('indexcounter')));
@@ -168,14 +199,14 @@
             if (parseInt($(this).attr('indexcounter')) == ratIndex) {
                 $(this).attr('image', true);
                 // console.log('inside');
-                $(this).css(
+                $(this).css({
 
-                    "background-image", "url(" + imgurl + ")"
-                );
+                    "background-image": "url(" + imgurl + ")"
+                });
             }
         })
     }
-    var timer = setInterval(randomratgenerator, 500);
+    var timer = setInterval(randomratgenerator, 1000);
     setTimeout(function() {
         clearInterval(timer);
         alert("GAME OVER: Your score :" + score);
